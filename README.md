@@ -8,6 +8,7 @@ Cliente de terminal pequeño pero complejo, construido con .NET 10 y EF Core InM
 dotnet run -- project list
 dotnet run -- project create api "API interna"
 dotnet run -- --json task list
+dotnet run -- --json task list --project=demo --completed=false
 dotnet run -- task add demo "Revisar arquitectura"
 dotnet run -- doctor
 ```

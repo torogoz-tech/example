@@ -15,7 +15,7 @@ public sealed class ProjectCommand : CliCommand
             "list" => new CommandResult("Proyectos encontrados", workspace.Projects),
             "show" => Show(workspace, _options.Argument(1)),
             "create" => await CreateAsync(store, workspace),
-            _ => throw new CliException("Uso: project list | project show <id>")
+            _ => throw new CliException("Uso: project list | project show <id> | project create <name> <description>")
         };
     }
     private static CommandResult Show(Workspace workspace, string? id)

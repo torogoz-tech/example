@@ -8,7 +8,9 @@ public static class HelpText
         Comandos:
           project list                         Lista proyectos
           project show <id>                    Muestra un proyecto
-          task list                            Lista tareas
+          project create <name> <description>  Crea un proyecto
+          task list [--project=<id>]           Filtra tareas por proyecto
+          task list [--completed=<true|false>] Filtra por estado
           task add <project-id> <title>        Crea una tarea
           task complete <id>                   Completa una tarea
           config show                          Muestra configuración

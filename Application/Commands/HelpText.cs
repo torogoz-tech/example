@@ -8,6 +8,7 @@ public static class HelpText
         Comandos:
           project list                         Lista proyectos
           project show <id>                    Muestra un proyecto
+          project create <name> <description>  Crea un proyecto
           task list                            Lista tareas
           task add <project-id> <title>        Crea una tarea
           task complete <id>                   Completa una tarea

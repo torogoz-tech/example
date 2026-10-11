@@ -1,5 +1,6 @@
 using ExampleCli.Domain;
 using ExampleCli.Infrastructure;
+using ExampleCli.Application.Queries;
 
 namespace ExampleCli.Application.Commands;
 
@@ -12,11 +13,31 @@ public sealed class TaskCommand : CliCommand
         var workspace = await store.LoadAsync();
         return (_options.Argument(0) ?? "list") switch
         {
-            "list" => new CommandResult("Tareas encontradas", workspace.Tasks),
+            "list" => List(workspace),
             "add" => await AddAsync(store, workspace),
             "complete" => await CompleteAsync(store, workspace),
             _ => throw new CliException("Uso: task list | task add <project-id> <title> | task complete <id>")
         };
+    }
+
+    private CommandResult List(Workspace workspace)
+    {
+        var filter = ParseFilter();
+        var tasks = workspace.Tasks.Where(task => filter.Matches(task.ProjectId, task.Completed)).ToList();
+        return new CommandResult("Tareas encontradas", tasks);
+    }
+
+    private TaskFilter ParseFilter()
+    {
+        string? projectId = null;
+        bool? completed = null;
+        foreach (var argument in _options.Arguments.Skip(1))
+        {
+            if (argument.StartsWith("--project=", StringComparison.Ordinal)) projectId = argument[10..];
+            else if (argument.StartsWith("--completed=", StringComparison.Ordinal) && bool.TryParse(argument[12..], out var value)) completed = value;
+            else throw new CliException("Filtros válidos: --project=<id> --completed=<true|false>");
+        }
+        return new TaskFilter { ProjectId = projectId, Completed = completed };
     }
     private async Task<CommandResult> AddAsync(WorkspaceDbContextStore store, Workspace workspace)
     {
